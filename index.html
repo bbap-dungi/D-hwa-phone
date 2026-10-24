@@ -111,7 +111,7 @@ const DATA={
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8em;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);overflow:hidden}
 .tt{font-size:.85rem;color:var(--mut)}
-#ph{--h:min(80vh,185vw);--vb:0px;height:var(--h);width:calc(var(--h)*9/19.5);font-size:calc(var(--h)/50);position:relative;border-radius:3.4em;border:.4em solid #111;overflow:hidden;background:#000;color:#111;user-select:none;isolation:isolate;transform:translateZ(0);-webkit-clip-path:inset(0 round 3.4em);clip-path:inset(0 round 3.4em)}
+#ph{--h:min(80vh,185vw);--vb:0px;height:var(--h);width:calc(var(--h)*9/19.5);font-size:calc(var(--h)/50);position:relative;border-radius:3.4em;border:.4em solid #111;overflow:hidden;background:#000;color:#111;user-select:none;isolation:isolate;transform:translateZ(0);-webkit-clip-path:inset(0 round 3.4em);clip-path:inset(0 round 3.4em)}#ph::after{content:"";position:absolute;inset:-.4em;border:.4em solid #111;border-radius:3.4em;pointer-events:none;z-index:2147483647}
 #ph.sk{animation:vib .06s infinite}
 @keyframes vib{0%,100%{transform:translate(var(--vb),0)}50%{transform:translate(calc(var(--vb)*-1),calc(var(--vb)*.6))}}
 .scr{position:absolute;inset:0;display:none}.scr.on{display:block}
