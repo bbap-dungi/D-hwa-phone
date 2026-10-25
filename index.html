@@ -1858,7 +1858,7 @@ function galAct(a,t){const L=D.gal,n=L.length,i=+t.dataset.i;
  else if(a=="Gsh"){toast("공유할 수 없어요");return}else if(a=="Gadj"){toast("편집할 수 없어요");return}else if(a=="Ginf"){const t=glDt(L[S.v]);toast(t[0]+" "+t[1]);return}else if(a=="Gsel"){toast("선택 기능은 지원하지 않아요");return}
  else if(a=="Gdl"){L.splice(S.v,1);toast("삭제했어요");if(!L.length||S.v>=L.length)S.v=null}
  render()}
-(function(){let x0=null;const ab=E('#ab');ab.addEventListener('pointerdown',e=>{x0=e.target.closest('.glm')&&e.target.tagName!='VIDEO'?e.clientX:null});ab.addEventListener('pointerup',e=>{if(x0==null||S.app!='gal'||S.v==null)return;const dx=e.clientX-x0;x0=null;if(Math.abs(dx)>40)galAct(dx<0?'Gn':'Gp',{dataset:{}})});setInterval(()=>{if(S.app!='gal'&&S.app!='cam'){const v=E('#ab video');if(v&&!v.paused)v.pause()}},400)})();
+(function(){let x0=null;const ab=E('#ab');ab.addEventListener('pointerdown',e=>{x0=e.target.closest('.glm')&&e.target.tagName!='VIDEO'?e.clientX:null});ab.addEventListener('pointerup',e=>{if(x0==null||S.app!='gal'||S.v==null)return;const dx=e.clientX-x0;x0=null;if(Math.abs(dx)>40)galAct(dx<0?'Gn':'Gp',{dataset:{}})});setInterval(()=>{if(S.app!='gal'&&S.app!='cam'&&S.app!='ig'){const v=E('#ab video');if(v&&!v.paused)v.pause()}},400)})();
 function calSel(){const m=S.cm,t=D.today.split("-");S.sel=(m.getFullYear()==+t[0]&&m.getMonth()==+t[1]-1)?D.today:`${m.getFullYear()}-${p2(m.getMonth()+1)}-01`}
 function cal(){const m=S.cm,y=m.getFullYear(),mo=m.getMonth(),f=new Date(y,mo,1).getDay(),n=new Date(y,mo+1,0).getDate();
  let c="일월화수목금토".split("").map(x=>`<div class="clw">${x}</div>`).join("");for(let i=0;i<f;i++)c+="<i></i>";
@@ -2066,7 +2066,7 @@ function capH(p,k){const g=G(),rfd=g.rf&&g.rf[k]&&p.cap2,trs=g.trs&&g.trs[k]&&p.
  const sh=ex||rfd||trs?full:(lg?full.split("\n")[0].slice(0,38):(p.cap||""));
  return`<span class="igcpt">${tg(sh)}</span>`+((lg||p.more)&&!ex&&!rfd&&!trs?` <em data-a="IGmore" data-k="${k}">… 더 보기</em>`:"")+(p.tr?`<div class="igtrl" data-a="IGtr" data-k="${k}">${trs?"원본 보기":"번역 보기"}</div>`:"")}
 function post(p,k){const g=G(),on=g.lk[k],sv=g.sv[k],fl=g.fl[p.u]!=null?g.fl[p.u]:0,n=p.imgs.length;
- const sl=p.imgs.map(m=>`<i style="background-image:url(${I[m]})">${p.vid?`<video data-a="IGvtap" data-v="${p.vid}" muted loop playsinline autoplay preload="auto" poster="${I[m]}"></video>`:""}</i>`).join("");
+ const sl=p.imgs.map(m=>`<i style="background-image:url(${I[m]})">${p.vid?`<video data-a="IGvtap" data-v="${p.vid}" muted loop playsinline preload="metadata" poster="${I[m]}"></video>`:""}</i>`).join("");
  return`<div class="igp"><div class="igph">${RW(p.u,av(p))}<div class="ignm"><b${LK(p.u)}>${esc(p.u)}${p.vf?`<i class="igvf">${IC.ck}</i>`:""}</b><small>${p.mus?`<span class="igmsc">♬ ${esc(p.mus)}</span>`:(p.sub||"")}</small></div>${p.fl?`<a class="igfl${fl?" on":""}" data-a="IGfl" data-u="${esc(p.u)}">${fl?"팔로잉":"팔로우"}</a>`:""}<a data-a="IGmenu">${IC.menu}</a></div>
  <div class="igmw"><div class="igmd${p.sq?" sq":""}" data-n="${n}"${p.ar?` style="aspect-ratio:${p.ar}"`:""}>${sl}</div>${n>1?`<span class="igcnt">1/${n}</span>`:""}${p.vid?`<a class="igmt" data-a="IGmute">${IC.mute}</a><a class="igplb" data-a="IGvplay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></a>`:""}</div>
  ${n>1?`<div class="igdt">${dotsH(n,0)}</div>`:""}
@@ -2239,16 +2239,16 @@ window.igR=function(keep=1){const ab=E2("#ab"),g=G();if(!ab||!g)return;const cs=
  const c=E2("#igct");if(c&&(!same||!keep))c.scrollTop=1e5;
  igVid();stTimer()};
 const VU={};
+let IGO=null;function igObs(){if(IGO)return IGO;IGO=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target;if(!v.isConnected){IGO.unobserve(v);return}if(e.isIntersecting&&e.intersectionRatio>=.55){v.dataset.vis="1";const q=v.play();if(q&&q.catch)q.catch(()=>{})}else{v.dataset.vis="0";v.pause()}}),{threshold:[0,.55,1]});return IGO}
 function igVid(){document.querySelectorAll("#ab video[data-v]").forEach(v=>{const k=v.dataset.v;if(typeof IGV=="undefined"||!IGV[k])return;
   const dataSrc="data:video/mp4;base64,"+IGV[k];
   v.muted=true;v.setAttribute("playsinline","");
   v.addEventListener("error",()=>{if(!v.dataset.fb){v.dataset.fb=1;v.src=dataSrc;v.load();const p=v.play();if(p&&p.catch)p.catch(()=>{})}},{once:false});
   try{if(!VU[k]){const b=atob(IGV[k]),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);VU[k]=URL.createObjectURL(new Blob([a],{type:"video/mp4"}))}v.src=VU[k]}catch(e){v.dataset.fb=1;v.src=dataSrc}
-  v.loop=true;v.autoplay=true;window.VT=window.VT||{};
-  v.addEventListener("loadedmetadata",()=>{if(VT[k]>0.2&&VT[k]<(v.duration||1e9)-0.3){try{v.currentTime=VT[k]}catch(e){}}const q=v.play();if(q&&q.catch)q.catch(()=>{})},{once:true});
+  v.loop=true;window.VT=window.VT||{};
+  v.addEventListener("loadedmetadata",()=>{if(VT[k]>0.2&&VT[k]<(v.duration||1e9)-0.3){try{v.currentTime=VT[k]}catch(e){}}if(v.dataset.vis==="1"){const q=v.play();if(q&&q.catch)q.catch(()=>{})}},{once:true});
   v.addEventListener("timeupdate",()=>{VT[k]=v.currentTime});
-  v.addEventListener("pause",()=>{if(v.isConnected&&!v.ended&&S.app=="ig")setTimeout(()=>{if(v.isConnected&&v.paused&&S.app=="ig")v.play().catch(()=>{})},60)});
-  const p=v.play();if(p&&p.catch)p.catch(()=>{v.closest(".igmw")&&v.closest(".igmw").classList.add("igpaused")});
+  igObs().observe(v);
   v.addEventListener("playing",()=>{const w=v.closest(".igmw");if(w)w.classList.remove("igpaused")})})}
 function stTimer(){clearTimeout(igT);const g=G();if(g&&g.st&&!g.stm)igT=setTimeout(()=>{if(S.app=="ig"&&G()&&G().st)stNext()},5000)}
 function stInfo(){const A=G0(),s=G().st;return s.h!=null?{n:A.hl[s.h].pics.length}:{n:(s.my?A.myst:A.stories[s.g]).pics.length}}
