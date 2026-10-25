@@ -2244,6 +2244,10 @@ function igVid(){document.querySelectorAll("#ab video[data-v]").forEach(v=>{cons
   v.muted=true;v.setAttribute("playsinline","");
   v.addEventListener("error",()=>{if(!v.dataset.fb){v.dataset.fb=1;v.src=dataSrc;v.load();const p=v.play();if(p&&p.catch)p.catch(()=>{})}},{once:false});
   try{if(!VU[k]){const b=atob(IGV[k]),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);VU[k]=URL.createObjectURL(new Blob([a],{type:"video/mp4"}))}v.src=VU[k]}catch(e){v.dataset.fb=1;v.src=dataSrc}
+  v.loop=true;v.autoplay=true;window.VT=window.VT||{};
+  v.addEventListener("loadedmetadata",()=>{if(VT[k]>0.2&&VT[k]<(v.duration||1e9)-0.3){try{v.currentTime=VT[k]}catch(e){}}const q=v.play();if(q&&q.catch)q.catch(()=>{})},{once:true});
+  v.addEventListener("timeupdate",()=>{VT[k]=v.currentTime});
+  v.addEventListener("pause",()=>{if(v.isConnected&&!v.ended&&S.app=="ig")setTimeout(()=>{if(v.isConnected&&v.paused&&S.app=="ig")v.play().catch(()=>{})},60)});
   const p=v.play();if(p&&p.catch)p.catch(()=>{v.closest(".igmw")&&v.closest(".igmw").classList.add("igpaused")});
   v.addEventListener("playing",()=>{const w=v.closest(".igmw");if(w)w.classList.remove("igpaused")})})}
 function stTimer(){clearTimeout(igT);const g=G();if(g&&g.st&&!g.stm)igT=setTimeout(()=>{if(S.app=="ig"&&G()&&G().st)stNext()},5000)}
@@ -2329,7 +2333,7 @@ window.igAct=function(t){const a=t.dataset.a,g=G(),A=G0(),k=t.dataset.k,i=+t.dat
  else if(a=="IGreq"){toast("메시지 요청이 없어요")}
  else if(a=="IGmute"){const v=t.parentNode.querySelector("video");if(v){v.muted=!v.muted;t.classList.toggle("on",!v.muted);t.innerHTML=v.muted?IC.mute:IC.unmute}}
  else if(a=="IGclk"){g.cl[k]=!g.cl[k];const sc=E2(".igcm .ls"),y=sc?sc.scrollTop:0;igR();const n=E2(".igcm .ls");if(n)n.scrollTop=y}
- else if(a=="IGvtap"||a=="IGvplay"){const v=t.closest(".igmw").querySelector("video");if(v){if(v.paused){v.play().catch(()=>{});t.closest(".igmw").classList.remove("igpaused")}else v.pause()}}
+ else if(a=="IGvtap"||a=="IGvplay"){const v=t.closest(".igmw").querySelector("video");if(v){v.play().catch(()=>{});t.closest(".igmw").classList.remove("igpaused")}}
  else if(a=="IGccx"){g.ccx=1;igR()}
  else if(a=="IGmore"){g.cx[k]=1;igR()}
  else if(a=="IGtr"){g.trs=g.trs||{};g.trs[k]=!g.trs[k];igR()}
